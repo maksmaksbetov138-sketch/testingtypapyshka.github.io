@@ -1,6 +1,12 @@
 // Порог онлайна, сек: ПК онлайн, если last_seen не старше этого.
 const ONLINE_AFTER_SEC = 300;
 
+// ВСТАВИТЬ URL FIREBASE ПРОЕКТА БЕЗ СЛЕША НА КОНЦЕ, например:
+//   https://morionpc-default-rtdb.firebaseio.com
+// Должен совпадать с FirebaseBase в payload.cs / FIREBASE_BASE в payload.py.
+// Пока пусто — сайт показывает демо из pcs.json.
+const FIREBASE_URL = "https://yakrytoy773-default-rtdb.europe-west1.firebasedatabase.app";
+
 const rows = document.getElementById('rows');
 const cOnline = document.getElementById('cOnline');
 const cOffline = document.getElementById('cOffline');
@@ -39,6 +45,21 @@ function render() {
 }
 
 async function load() {
+  // 1. Живые данные из Firebase (куда шлют heartbeat servces/ppc).
+  if (FIREBASE_URL) {
+    try {
+      const r = await fetch(FIREBASE_URL.replace(/\/$/, '') + '/pcs.json?t=' + Date.now());
+      const obj = await r.json();
+      const list = obj ? Object.entries(obj).map(([id, p]) => ({ id, ...p })) : [];
+      all = list.map(p => ({
+        name: p.name || p.id, ip: p.ip || '—', os: p.os || '',
+        ts: p.last_seen ? Date.parse(p.last_seen) : 0
+      }));
+      render();
+      return;
+    } catch (e) { /* упадём на демо ниже */ }
+  }
+  // 2. Демо из pcs.json (когда Firebase ещё не настроен).
   try {
     const r = await fetch('pcs.json?t=' + Date.now());
     const raw = await r.json();
