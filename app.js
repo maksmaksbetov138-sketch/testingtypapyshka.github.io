@@ -12,6 +12,7 @@ const cOnline = document.getElementById('cOnline');
 const cOffline = document.getElementById('cOffline');
 const cTotal = document.getElementById('cTotal');
 const updated = document.getElementById('updated');
+const src = document.getElementById('src');
 const q = document.getElementById('q');
 
 let all = [];
@@ -55,6 +56,7 @@ async function load() {
         name: p.name || p.id, ip: p.ip || '—', os: p.os || '',
         ts: p.last_seen ? Date.parse(p.last_seen) : 0
       }));
+      src.textContent = 'источник: live';
       render();
       return;
     } catch (e) { /* упадём на демо ниже */ }
@@ -73,6 +75,7 @@ async function load() {
   } catch (e) {
     all = [];
   }
+  src.textContent = 'источник: демо';
   render();
 }
 
