@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MorionPC — онлайн / офлайн</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!-- GitHub Pages: залить папку Site как корень сайта.
+     Данные: pcs.json (массив с last_seen_offset_sec).
+     Реальные данные: позже payload будет обновлять pcs.json
+     через backend/Action, формат тот же. -->
+<header>
+  <h1>MorionPC</h1>
+  <div class="sub">
+    <span id="updated">обновление…</span>
+    <button id="refresh">Обновить</button>
+  </div>
+</header>
+
+<main>
+  <section class="cards">
+    <div class="card online"><div class="num" id="cOnline">–</div><div class="lbl">Онлайн</div></div>
+    <div class="card offline"><div class="num" id="cOffline">–</div><div class="lbl">Оффлайн</div></div>
+    <div class="card total"><div class="num" id="cTotal">–</div><div class="lbl">Всего</div></div>
+  </section>
+
+  <section class="panel">
+    <input id="q" type="search" placeholder="Поиск по имени / IP…">
+    <table>
+      <thead><tr><th>Имя</th><th>IP</th><th>ОС</th><th>Статус</th><th>Был(а) в сети</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </section>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
